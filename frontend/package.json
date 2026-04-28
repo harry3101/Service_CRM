@@ -7,9 +7,13 @@
     "dev": "vite dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
+    "start": "node server/render.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write ."
+  },
+  "engines": {
+    "node": ">=20"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",
