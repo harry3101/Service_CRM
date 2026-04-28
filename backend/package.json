@@ -1,0 +1,18 @@
+{
+  "name": "service-center-crm-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "seed": "node scripts/seed-sample.mjs"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.0.2",
+    "jose": "^5.9.6",
+    "mongoose": "^8.9.5"
+  }
+}

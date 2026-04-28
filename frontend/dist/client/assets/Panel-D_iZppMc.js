@@ -1,0 +1,1 @@
+import{j as s}from"./index-DHfHW1mx.js";function l({title:e,actions:a,children:r,className:n=""}){return s.jsxs("div",{className:`crm-panel ${n}`,children:[(e||a)&&s.jsxs("div",{className:"crm-panel-header",children:[s.jsx("span",{children:e}),a]}),s.jsx("div",{className:"p-3",children:r})]})}export{l as P};
