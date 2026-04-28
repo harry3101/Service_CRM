@@ -12,6 +12,42 @@ import {
 import { auth } from "@/lib/firebase";
 import { api } from "@/lib/api";
 
+/** Maps FirebaseAuth errors to user-facing text; 400s often mean Console/API key config. */
+function getAuthErrorMessage(e: unknown): string {
+  if (typeof e === "object" && e !== null && "code" in e) {
+    const code = String((e as { code: string }).code);
+    switch (code) {
+      case "auth/operation-not-allowed":
+        return "Email/password sign-in is turned off. In Firebase: Authentication → Sign-in method → enable Email/Password.";
+      case "auth/invalid-api-key":
+        return "Invalid API key. Confirm VITE_FIREBASE_API_KEY matches your Firebase Web app and redeploy.";
+      case "auth/app-not-authorized":
+        return "This domain is not authorized. Add your site to Firebase: Authentication → Settings → Authorized domains.";
+      case "auth/too-many-requests":
+        return "Too many attempts. Try again in a few minutes.";
+      case "auth/user-disabled":
+        return "This account has been disabled.";
+      case "auth/invalid-credential":
+      case "auth/wrong-password":
+      case "auth/user-not-found":
+        return "Invalid email or password.";
+      case "auth/email-already-in-use":
+        return "This email is already registered. Sign in instead.";
+      case "auth/invalid-email":
+        return "Enter a valid email address.";
+      case "auth/weak-password":
+        return "Use a stronger password (at least 6 characters).";
+      default:
+        if (import.meta.env.DEV) {
+          // eslint-disable-next-line no-console
+          console.error("[auth]", e);
+        }
+    }
+  }
+  if (e instanceof Error) return e.message;
+  return "Sign in failed";
+}
+
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
 
@@ -51,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await signInWithEmailAndPassword(auth, email, password);
       return { error: null };
     } catch (e) {
-      return { error: e instanceof Error ? e.message : "Sign in failed" };
+      return { error: getAuthErrorMessage(e) };
     }
   };
 
@@ -75,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ) {
         return { error: null, cancelled: true };
       }
-      return { error: err?.message || "Google sign-in failed", cancelled: false };
+      return { error: getAuthErrorMessage(e), cancelled: false };
     }
   };
 
@@ -93,7 +129,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       return { error: null };
     } catch (e) {
-      return { error: e instanceof Error ? e.message : "Sign up failed" };
+      return { error: getAuthErrorMessage(e) };
     }
   };
 
