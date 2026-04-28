@@ -8,7 +8,7 @@
     "seed": "node scripts/seed-sample.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.19.0"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -13,7 +13,7 @@
     "format": "prettier --write ."
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.19.0"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",

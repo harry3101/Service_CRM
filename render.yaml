@@ -27,7 +27,7 @@ services:
     healthCheckPath: /health
     envVars:
       - key: NODE_VERSION
-        value: "20.18.0"
+        value: "22.14.0"
       - key: CORS_ALLOW_ONRENDER
         value: "1"
       - key: MONGODB_URI
@@ -48,7 +48,7 @@ services:
     healthCheckPath: /
     envVars:
       - key: NODE_VERSION
-        value: "20.18.0"
+        value: "22.14.0"
       - key: VITE_API_URL
         sync: false
       - key: VITE_FIREBASE_API_KEY
