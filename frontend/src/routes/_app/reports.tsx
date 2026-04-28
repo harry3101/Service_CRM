@@ -2,7 +2,18 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import Panel from "@/components/Panel";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from "recharts";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  Legend,
+} from "recharts";
 
 export const Route = createFileRoute("/_app/reports")({ component: Reports });
 
@@ -19,14 +30,21 @@ function Reports() {
       const calls = { data: raw.service_calls };
       const alloc = { data: raw.call_allocations };
       const rmap: Record<string, number> = {};
-      (rev.data ?? []).filter(r => r.status === "paid").forEach(r => {
-        const m = new Date(r.invoice_date).toLocaleDateString("en-IN", { month: "short", year: "2-digit" });
-        rmap[m] = (rmap[m] ?? 0) + Number(r.amount) + Number(r.tax);
-      });
+      (rev.data ?? [])
+        .filter((r) => r.status === "paid")
+        .forEach((r) => {
+          const m = new Date(r.invoice_date).toLocaleDateString("en-IN", {
+            month: "short",
+            year: "2-digit",
+          });
+          rmap[m] = (rmap[m] ?? 0) + Number(r.amount) + Number(r.tax);
+        });
       setRevByMonth(Object.entries(rmap).map(([month, amount]) => ({ month, amount })));
 
       const pmap: Record<string, number> = {};
-      (calls.data ?? []).forEach(c => { pmap[c.priority] = (pmap[c.priority] ?? 0) + 1; });
+      (calls.data ?? []).forEach((c) => {
+        pmap[c.priority] = (pmap[c.priority] ?? 0) + 1;
+      });
       setCallsByPriority(Object.entries(pmap).map(([priority, count]) => ({ priority, count })));
 
       const cmap: Record<string, number> = {};
@@ -56,7 +74,12 @@ function Reports() {
               <YAxis tick={{ fontSize: 11 }} />
               <Tooltip />
               <Legend wrapperStyle={{ fontSize: 11 }} />
-              <Line type="monotone" dataKey="amount" stroke="oklch(0.45 0.16 255)" strokeWidth={2} />
+              <Line
+                type="monotone"
+                dataKey="amount"
+                stroke="oklch(0.45 0.16 255)"
+                strokeWidth={2}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -92,7 +115,13 @@ function Reports() {
           <ResponsiveContainer>
             <BarChart data={engineerLoad}>
               <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.9 0.01 250)" />
-              <XAxis dataKey="engineer" tick={{ fontSize: 10 }} angle={-15} textAnchor="end" height={50} />
+              <XAxis
+                dataKey="engineer"
+                tick={{ fontSize: 10 }}
+                angle={-15}
+                textAnchor="end"
+                height={50}
+              />
               <YAxis tick={{ fontSize: 11 }} />
               <Tooltip />
               <Bar dataKey="calls" fill="oklch(0.5 0.15 150)" />

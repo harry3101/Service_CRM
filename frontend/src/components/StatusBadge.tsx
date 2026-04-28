@@ -16,7 +16,9 @@ const MAP: Record<string, string> = {
 export default function StatusBadge({ value }: { value: string }) {
   const cls = MAP[value?.toLowerCase()] ?? "bg-muted text-muted-foreground border-border";
   return (
-    <span className={`inline-block rounded border px-1.5 py-0.5 text-[10.5px] font-medium uppercase tracking-wide ${cls}`}>
+    <span
+      className={`inline-block rounded border px-1.5 py-0.5 text-[10.5px] font-medium uppercase tracking-wide ${cls}`}
+    >
       {value}
     </span>
   );

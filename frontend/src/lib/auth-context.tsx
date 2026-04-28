@@ -69,7 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: null, cancelled: false };
     } catch (e: unknown) {
       const err = e as { code?: string; message?: string };
-      if (err?.code === "auth/popup-closed-by-user" || err?.code === "auth/cancelled-popup-request") {
+      if (
+        err?.code === "auth/popup-closed-by-user" ||
+        err?.code === "auth/cancelled-popup-request"
+      ) {
         return { error: null, cancelled: true };
       }
       return { error: err?.message || "Google sign-in failed", cancelled: false };
@@ -99,7 +102,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <Ctx.Provider value={{ user, loading, signIn, signUp, signInWithGoogle, signOut }}>{children}</Ctx.Provider>
+    <Ctx.Provider value={{ user, loading, signIn, signUp, signInWithGoogle, signOut }}>
+      {children}
+    </Ctx.Provider>
   );
 }
 

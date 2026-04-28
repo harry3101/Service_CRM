@@ -15,22 +15,21 @@ export function waitForFirebaseUser(): Promise<User | null> {
     return Promise.resolve(auth.currentUser);
   }
   return new Promise((resolve) => {
-    let timeout: ReturnType<typeof setTimeout>;
     let settled = false;
-    const done = (user: User | null) => {
+    function done(user: User | null) {
       if (settled) return;
       settled = true;
-      if (timeout) clearTimeout(timeout);
+      clearTimeout(timeout);
       unsubscribe();
       resolve(user);
-    };
+    }
     const unsubscribe = onAuthStateChanged(auth, (user) => done(user));
-    timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
       if (import.meta.env.DEV) {
         console.warn(
           "[auth] Firebase onAuthStateChanged did not fire within " +
             AUTH_READY_MS / 1000 +
-            "s; treating as signed out. Check VITE_FIREBASE_* in .env and Firebase config."
+            "s; treating as signed out. Check VITE_FIREBASE_* in .env and Firebase config.",
         );
       }
       done(null);

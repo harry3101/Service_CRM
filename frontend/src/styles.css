@@ -95,8 +95,13 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html, body { height: 100%; }
+  * {
+    border-color: var(--color-border);
+  }
+  html,
+  body {
+    height: 100%;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -106,7 +111,11 @@
 }
 
 /* Compact enterprise table */
-.crm-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.crm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
 .crm-table th {
   background: var(--color-secondary);
   color: var(--color-secondary-foreground);
@@ -121,7 +130,9 @@
   border-bottom: 1px solid var(--color-border);
   vertical-align: middle;
 }
-.crm-table tbody tr:hover { background: var(--color-accent); }
+.crm-table tbody tr:hover {
+  background: var(--color-accent);
+}
 
 .crm-panel {
   background: var(--color-card);

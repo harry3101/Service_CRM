@@ -3,18 +3,47 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import Panel from "@/components/Panel";
 import StatusBadge from "@/components/StatusBadge";
-import { PhoneCall, IndianRupee, Package, UserCheck, TrendingUp, AlertTriangle } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
+import {
+  PhoneCall,
+  IndianRupee,
+  Package,
+  UserCheck,
+  TrendingUp,
+  AlertTriangle,
+} from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from "recharts";
 
 export const Route = createFileRoute("/_app/")({ component: Dashboard });
 
 interface Kpis {
-  totalRevenue: number; openCalls: number; allocated: number; lowStock: number;
-  totalCalls: number; closedCalls: number;
+  totalRevenue: number;
+  openCalls: number;
+  allocated: number;
+  lowStock: number;
+  totalCalls: number;
+  closedCalls: number;
 }
 
 function Dashboard() {
-  const [kpis, setKpis] = useState<Kpis>({ totalRevenue: 0, openCalls: 0, allocated: 0, lowStock: 0, totalCalls: 0, closedCalls: 0 });
+  const [kpis, setKpis] = useState<Kpis>({
+    totalRevenue: 0,
+    openCalls: 0,
+    allocated: 0,
+    lowStock: 0,
+    totalCalls: 0,
+    closedCalls: 0,
+  });
   const [recent, setRecent] = useState<any[]>([]);
   const [revenueChart, setRevenueChart] = useState<any[]>([]);
   const [statusPie, setStatusPie] = useState<any[]>([]);
@@ -26,20 +55,23 @@ function Dashboard() {
         api.getRevenue() as Promise<any[]>,
         api.getInventory() as Promise<any[]>,
       ]);
-      const totalRevenue = revRows.filter(r => r.status === "paid").reduce((s, r) => s + Number(r.amount) + Number(r.tax), 0);
+      const totalRevenue = revRows
+        .filter((r) => r.status === "paid")
+        .reduce((s, r) => s + Number(r.amount) + Number(r.tax), 0);
       setKpis({
         totalRevenue,
-        openCalls: callRows.filter(c => c.status === "open").length,
-        allocated: callRows.filter(c => c.status === "allocated" || c.status === "in-progress").length,
-        lowStock: invRows.filter(i => i.stock_qty <= i.reorder_level).length,
+        openCalls: callRows.filter((c) => c.status === "open").length,
+        allocated: callRows.filter((c) => c.status === "allocated" || c.status === "in-progress")
+          .length,
+        lowStock: invRows.filter((i) => i.stock_qty <= i.reorder_level).length,
         totalCalls: callRows.length,
-        closedCalls: callRows.filter(c => c.status === "closed").length,
+        closedCalls: callRows.filter((c) => c.status === "closed").length,
       });
       setRecent(callRows.slice(0, 6));
 
       // revenue by month
       const map: Record<string, number> = {};
-      revRows.forEach(r => {
+      revRows.forEach((r) => {
         const m = new Date(r.invoice_date).toLocaleDateString("en-IN", { month: "short" });
         map[m] = (map[m] ?? 0) + Number(r.amount);
       });
@@ -47,21 +79,39 @@ function Dashboard() {
 
       // status pie
       const sMap: Record<string, number> = {};
-      callRows.forEach(c => { sMap[c.status] = (sMap[c.status] ?? 0) + 1; });
+      callRows.forEach((c) => {
+        sMap[c.status] = (sMap[c.status] ?? 0) + 1;
+      });
       setStatusPie(Object.entries(sMap).map(([name, value]) => ({ name, value })));
     })();
   }, []);
 
-  const PIE_COLORS = ["hsl(220 85% 55%)", "hsl(40 90% 55%)", "hsl(150 60% 45%)", "hsl(0 70% 55%)", "hsl(200 70% 50%)"];
+  const PIE_COLORS = [
+    "hsl(220 85% 55%)",
+    "hsl(40 90% 55%)",
+    "hsl(150 60% 45%)",
+    "hsl(0 70% 55%)",
+    "hsl(200 70% 50%)",
+  ];
 
   return (
     <div className="space-y-4">
       {/* KPI cards */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <KpiCard icon={IndianRupee} label="Total Revenue" value={`₹${kpis.totalRevenue.toLocaleString("en-IN")}`} accent="success" />
+        <KpiCard
+          icon={IndianRupee}
+          label="Total Revenue"
+          value={`₹${kpis.totalRevenue.toLocaleString("en-IN")}`}
+          accent="success"
+        />
         <KpiCard icon={PhoneCall} label="Open Calls" value={kpis.openCalls} accent="info" />
         <KpiCard icon={UserCheck} label="In Progress" value={kpis.allocated} accent="warning" />
-        <KpiCard icon={Package} label="Low Stock Items" value={kpis.lowStock} accent="destructive" />
+        <KpiCard
+          icon={Package}
+          label="Low Stock Items"
+          value={kpis.lowStock}
+          accent="destructive"
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
@@ -81,8 +131,16 @@ function Dashboard() {
           <div style={{ width: "100%", height: 220 }}>
             <ResponsiveContainer>
               <PieChart>
-                <Pie data={statusPie} dataKey="value" nameKey="name" outerRadius={70} label={{ fontSize: 10 }}>
-                  {statusPie.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                <Pie
+                  data={statusPie}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={70}
+                  label={{ fontSize: 10 }}
+                >
+                  {statusPie.map((_, i) => (
+                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                  ))}
                 </Pie>
                 <Legend wrapperStyle={{ fontSize: 11 }} />
               </PieChart>
@@ -91,20 +149,43 @@ function Dashboard() {
         </Panel>
       </div>
 
-      <Panel title="Recent Service Calls" actions={<a href="/calls" className="text-[11px] text-primary hover:underline">View all →</a>}>
+      <Panel
+        title="Recent Service Calls"
+        actions={
+          <a href="/calls" className="text-[11px] text-primary hover:underline">
+            View all →
+          </a>
+        }
+      >
         <table className="crm-table">
           <thead>
-            <tr><th>Ticket</th><th>Customer</th><th>Product</th><th>Priority</th><th>Status</th><th>Date</th></tr>
+            <tr>
+              <th>Ticket</th>
+              <th>Customer</th>
+              <th>Product</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
           </thead>
           <tbody>
-            {recent.map(c => (
+            {recent.map((c) => (
               <tr key={c.id}>
                 <td className="font-mono">{c.ticket_no}</td>
-                <td>{c.customers?.name} <span className="text-muted-foreground">· {c.customers?.city}</span></td>
+                <td>
+                  {c.customers?.name}{" "}
+                  <span className="text-muted-foreground">· {c.customers?.city}</span>
+                </td>
                 <td>{c.product}</td>
-                <td><StatusBadge value={c.priority} /></td>
-                <td><StatusBadge value={c.status} /></td>
-                <td className="text-muted-foreground">{new Date(c.created_at).toLocaleDateString("en-IN")}</td>
+                <td>
+                  <StatusBadge value={c.priority} />
+                </td>
+                <td>
+                  <StatusBadge value={c.status} />
+                </td>
+                <td className="text-muted-foreground">
+                  {new Date(c.created_at).toLocaleDateString("en-IN")}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -120,8 +201,18 @@ function Dashboard() {
   );
 }
 
-function KpiCard({ icon: Icon, label, value, accent }: { icon: any; label: string; value: any; accent: string }) {
-  const accentMap: Record<string,string> = {
+function KpiCard({
+  icon: Icon,
+  label,
+  value,
+  accent,
+}: {
+  icon: any;
+  label: string;
+  value: any;
+  accent: string;
+}) {
+  const accentMap: Record<string, string> = {
     success: "text-success bg-success/10",
     info: "text-info bg-info/10",
     warning: "text-warning-foreground bg-warning/15",

@@ -11,13 +11,21 @@ export const Route = createFileRoute("/_app/engineers")({ component: Engineers }
 function Engineers() {
   const [rows, setRows] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", specialization: "", status: "available" });
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    specialization: "",
+    status: "available",
+  });
 
   const load = async () => {
     const data = (await api.getEngineers()) as any[];
     setRows(data ?? []);
   };
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const create = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +34,10 @@ function Engineers() {
     } catch (e) {
       return toast.error(e instanceof Error ? e.message : "Failed");
     }
-    toast.success("Engineer added"); setOpen(false); setForm({ name: "", phone: "", email: "", specialization: "", status: "available" }); load();
+    toast.success("Engineer added");
+    setOpen(false);
+    setForm({ name: "", phone: "", email: "", specialization: "", status: "available" });
+    load();
   };
 
   const setStatus = async (id: string, status: string) => {
@@ -40,19 +51,44 @@ function Engineers() {
 
   return (
     <div className="space-y-3">
-      <Panel title={`Engineers (${rows.length})`} actions={<button onClick={() => setOpen(true)} className="flex items-center gap-1 rounded bg-primary px-2 py-1 text-[11px] text-primary-foreground hover:bg-primary/90"><Plus className="h-3 w-3" /> Add Engineer</button>}>
+      <Panel
+        title={`Engineers (${rows.length})`}
+        actions={
+          <button
+            onClick={() => setOpen(true)}
+            className="flex items-center gap-1 rounded bg-primary px-2 py-1 text-[11px] text-primary-foreground hover:bg-primary/90"
+          >
+            <Plus className="h-3 w-3" /> Add Engineer
+          </button>
+        }
+      >
         <table className="crm-table">
-          <thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Specialization</th><th>Status</th><th>Change</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Specialization</th>
+              <th>Status</th>
+              <th>Change</th>
+            </tr>
+          </thead>
           <tbody>
-            {rows.map(e => (
+            {rows.map((e) => (
               <tr key={e.id}>
                 <td className="font-medium">{e.name}</td>
                 <td>{e.phone}</td>
                 <td>{e.email}</td>
                 <td>{e.specialization}</td>
-                <td><StatusBadge value={e.status} /></td>
                 <td>
-                  <select value={e.status} onChange={ev => setStatus(e.id, ev.target.value)} className="rounded border border-input bg-background px-1 py-0.5 text-[11px]">
+                  <StatusBadge value={e.status} />
+                </td>
+                <td>
+                  <select
+                    value={e.status}
+                    onChange={(ev) => setStatus(e.id, ev.target.value)}
+                    className="rounded border border-input bg-background px-1 py-0.5 text-[11px]"
+                  >
                     <option value="available">available</option>
                     <option value="on-call">on-call</option>
                     <option value="off-duty">off-duty</option>
@@ -69,19 +105,62 @@ function Engineers() {
           <form onSubmit={create} className="w-full max-w-md rounded bg-card shadow-xl">
             <div className="crm-panel-header">New Engineer</div>
             <div className="grid grid-cols-2 gap-3 p-4 text-xs">
-              <F label="Name" full><input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="i" /></F>
-              <F label="Phone"><input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="i" /></F>
-              <F label="Email"><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="i" /></F>
-              <F label="Specialization"><input value={form.specialization} onChange={e => setForm({ ...form, specialization: e.target.value })} className="i" /></F>
+              <F label="Name" full>
+                <input
+                  required
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="i"
+                />
+              </F>
+              <F label="Phone">
+                <input
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  className="i"
+                />
+              </F>
+              <F label="Email">
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  className="i"
+                />
+              </F>
+              <F label="Specialization">
+                <input
+                  value={form.specialization}
+                  onChange={(e) => setForm({ ...form, specialization: e.target.value })}
+                  className="i"
+                />
+              </F>
               <F label="Status">
-                <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} className="i">
-                  <option value="available">available</option><option value="on-call">on-call</option><option value="off-duty">off-duty</option>
+                <select
+                  value={form.status}
+                  onChange={(e) => setForm({ ...form, status: e.target.value })}
+                  className="i"
+                >
+                  <option value="available">available</option>
+                  <option value="on-call">on-call</option>
+                  <option value="off-duty">off-duty</option>
                 </select>
               </F>
             </div>
             <div className="flex justify-end gap-2 border-t bg-secondary p-2">
-              <button type="button" onClick={() => setOpen(false)} className="rounded border border-input bg-background px-3 py-1 text-xs">Cancel</button>
-              <button type="submit" className="rounded bg-primary px-3 py-1 text-xs text-primary-foreground">Save</button>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="rounded border border-input bg-background px-3 py-1 text-xs"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="rounded bg-primary px-3 py-1 text-xs text-primary-foreground"
+              >
+                Save
+              </button>
             </div>
           </form>
         </div>
@@ -90,6 +169,21 @@ function Engineers() {
     </div>
   );
 }
-function F({ label, children, full }: { label: string; children: React.ReactNode; full?: boolean }) {
-  return <div className={full ? "col-span-2" : ""}><label className="mb-1 block text-[10.5px] font-medium uppercase text-muted-foreground">{label}</label>{children}</div>;
+function F({
+  label,
+  children,
+  full,
+}: {
+  label: string;
+  children: React.ReactNode;
+  full?: boolean;
+}) {
+  return (
+    <div className={full ? "col-span-2" : ""}>
+      <label className="mb-1 block text-[10.5px] font-medium uppercase text-muted-foreground">
+        {label}
+      </label>
+      {children}
+    </div>
+  );
 }

@@ -1,7 +1,15 @@
 import type { ReactNode } from "react";
 
-export default function Panel({ title, actions, children, className = "" }: {
-  title?: string; actions?: ReactNode; children: ReactNode; className?: string;
+export default function Panel({
+  title,
+  actions,
+  children,
+  className = "",
+}: {
+  title?: string;
+  actions?: ReactNode;
+  children: ReactNode;
+  className?: string;
 }) {
   return (
     <div className={`crm-panel ${className}`}>

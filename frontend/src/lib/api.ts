@@ -50,8 +50,7 @@ export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
 
 export const api = {
   authSync: () => apiPost<{ ok: boolean }>("/auth/sync", {}),
-  getProfile: () =>
-    apiGet<{ full_name: string; phone: string }>("/me/profile"),
+  getProfile: () => apiGet<{ full_name: string; phone: string }>("/me/profile"),
   updateProfile: (body: { full_name: string; phone: string }) =>
     apiPatch<{ ok: boolean }>("/me/profile", body),
   getMyRoles: () => apiGet<{ roles: string[] }>("/me/roles"),
@@ -59,8 +58,7 @@ export const api = {
   createCustomer: (body: unknown) => apiPost("/customers", body),
   getEngineers: () => apiGet<unknown[]>("/engineers"),
   createEngineer: (body: unknown) => apiPost("/engineers", body),
-  updateEngineer: (id: string, body: { status: string }) =>
-    apiPatch(`/engineers/${id}`, body),
+  updateEngineer: (id: string, body: { status: string }) => apiPatch(`/engineers/${id}`, body),
   getServiceCalls: () => apiGet<unknown[]>("/service-calls"),
   getOpenCalls: () => apiGet<unknown[]>("/calls/open"),
   createServiceCall: (body: unknown) => apiPost("/service-calls", body),
@@ -70,10 +68,10 @@ export const api = {
     apiPost("/call-allocations", body),
   getInventory: () => apiGet<unknown[]>("/inventory"),
   createInventory: (body: unknown) => apiPost("/inventory", body),
-  adjustInventory: (id: string, delta: number) =>
-    apiPost(`/inventory/${id}/adjust`, { delta }),
+  adjustInventory: (id: string, delta: number) => apiPost(`/inventory/${id}/adjust`, { delta }),
   getRevenue: () => apiGet<unknown[]>("/revenue"),
-  getClosedServiceCalls: () => apiGet<{ id: string; ticket_no: string }[]>("/service-calls/closed-ids"),
+  getClosedServiceCalls: () =>
+    apiGet<{ id: string; ticket_no: string }[]>("/service-calls/closed-ids"),
   createRevenue: (body: unknown) => apiPost("/revenue", body),
   getReportsRaw: () =>
     apiGet<{

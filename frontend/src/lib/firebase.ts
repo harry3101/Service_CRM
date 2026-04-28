@@ -14,7 +14,13 @@ const firebaseConfig = {
 
 if (import.meta.env.DEV && !import.meta.env.VITE_FIREBASE_API_KEY) {
   console.error(
-    "[firebase] Missing VITE_FIREBASE_* variables. Add them to frontend/.env (see .env.example)."
+    "[firebase] Missing VITE_FIREBASE_* variables. Add them to frontend/.env (see .env.example).",
+  );
+}
+
+if (typeof window !== "undefined" && !firebaseConfig.apiKey) {
+  console.error(
+    "[firebase] VITE_FIREBASE_API_KEY is empty. Rebuild the frontend with all VITE_FIREBASE_* set (e.g. in Render).",
   );
 }
 

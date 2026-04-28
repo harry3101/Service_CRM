@@ -8,4 +8,9 @@
 // Node (ERR_REQUIRE_ESM) during `vite build` on Render. See dist/index.js vs dist/index.cjs in the package.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config/dist/index.js";
 
-export default defineConfig();
+export default defineConfig({
+  vite: {
+    // Root-relative asset URLs (avoids /assets/*.js 404s when the app is served from origin path /).
+    base: "/",
+  },
+});

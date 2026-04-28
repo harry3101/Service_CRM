@@ -9,7 +9,12 @@ function NotFound() {
       <div>
         <h1 className="text-6xl font-bold text-primary">404</h1>
         <p className="mt-2 text-muted-foreground">Page not found</p>
-        <a href="/" className="mt-4 inline-block rounded bg-primary px-4 py-2 text-sm text-primary-foreground">Back to Dashboard</a>
+        <a
+          href="/"
+          className="mt-4 inline-block rounded bg-primary px-4 py-2 text-sm text-primary-foreground"
+        >
+          Back to Dashboard
+        </a>
       </div>
     </div>
   );
@@ -21,14 +26,22 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "DEMO CRM" },
-      { name: "description", content: "DEMO CRM — service center for calls, allocations, inventory and revenue." },
+      {
+        name: "description",
+        content: "DEMO CRM — service center for calls, allocations, inventory and revenue.",
+      },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
   shellComponent: ({ children }: { children: React.ReactNode }) => (
     <html lang="en">
-      <head><HeadContent /></head>
-      <body>{children}<Scripts /></body>
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
     </html>
   ),
   component: () => (
