@@ -27,7 +27,16 @@ const corsConfig = {
     if (extra.includes(requestOrigin)) {
       return callback(null, true);
     }
-    console.warn(`[cors] blocked: ${requestOrigin} — add to CORS_ORIGIN in backend .env`);
+    if (process.env.CORS_ALLOW_ONRENDER === "1") {
+      try {
+        if (/\.onrender\.com$/i.test(new URL(requestOrigin).hostname)) {
+          return callback(null, true);
+        }
+      } catch {
+        /* invalid origin url */
+      }
+    }
+    console.warn(`[cors] blocked: ${requestOrigin} — set CORS_ORIGIN or CORS_ALLOW_ONRENDER=1`);
     return callback(null, false);
   },
   credentials: true,
@@ -68,8 +77,8 @@ initAuth();
 
 connectDb()
   .then(() => {
-    app.listen(port, () => {
-      console.log(`DEMO CRM API listening on http://localhost:${port}`);
+    app.listen(port, "0.0.0.0", () => {
+      console.log(`DEMO CRM API listening on 0.0.0.0:${port}`);
     });
   })
   .catch((e) => {

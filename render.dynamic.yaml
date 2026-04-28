@@ -1,0 +1,29 @@
+# DYNAMIC: Node API (Express, MongoDB, Firebase JWT)
+# New → Blueprint → connect repo → this file. Deploy THIS FIRST; copy the URL, then set VITE_API_URL on the static/frontend service.
+#
+# Required env: MONGODB_URI, FIREBASE_PROJECT_ID, CORS_ALLOW_ONRENDER=1 (or CORS_ORIGIN=exact-frontend-URL)
+# Optional: FIREBASE_SERVICE_ACCOUNT
+#
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: demo-crm-api
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "20.18.0"
+      - key: CORS_ALLOW_ONRENDER
+        value: "1"
+      - key: MONGODB_URI
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT
+        sync: false

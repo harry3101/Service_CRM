@@ -1,0 +1,36 @@
+# "STATIC" FRONTEND: Node Web Service (built JS/CSS are static; HTML is served via TanStack Start handler, not a folder of .html for Render "Static Site")
+# Not Render's "Static Site" (CDN) product: see frontend/server/render.mjs. Same build as render.yaml’s demo-crm-web.
+# Set all VITE_* in the Render dashboard before deploy. Firebase → Authorized domains: add <name>.onrender.com
+#
+# Prerequisite: VITE_API_URL = https://<from-render.dynamic>.onrender.com (from your API deploy)
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: demo-crm-web
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "20.18.0"
+      - key: VITE_API_URL
+        sync: false
+      - key: VITE_FIREBASE_API_KEY
+        sync: false
+      - key: VITE_FIREBASE_AUTH_DOMAIN
+        sync: false
+      - key: VITE_FIREBASE_PROJECT_ID
+        sync: false
+      - key: VITE_FIREBASE_STORAGE_BUCKET
+        sync: false
+      - key: VITE_FIREBASE_MESSAGING_SENDER_ID
+        sync: false
+      - key: VITE_FIREBASE_APP_ID
+        sync: false
+      - key: VITE_FIREBASE_MEASUREMENT_ID
+        sync: false
