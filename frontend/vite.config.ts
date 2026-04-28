@@ -4,6 +4,8 @@
 //     componentTagger (dev-only), VITE_* env injection, @ path alias, React/TanStack dedupe,
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+// Import the ESM build explicitly: the package "main" is index.cjs and require("lovable-tagger") fails on
+// Node (ERR_REQUIRE_ESM) during `vite build` on Render. See dist/index.js vs dist/index.cjs in the package.
+import { defineConfig } from "@lovable.dev/vite-tanstack-config/dist/index.js";
 
 export default defineConfig();
